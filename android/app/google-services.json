@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "80391797069",
+    "project_id": "appvlinesys",
+    "storage_bucket": "appvlinesys.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:80391797069:android:be7710da6954841e805f04",
+        "android_client_info": {
+          "package_name": "com.willysandoval.appvline"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNysnhyvY2zwSRgBVePJkUC3tyrssv59E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
