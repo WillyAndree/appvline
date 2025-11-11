@@ -11,7 +11,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:appvline/view/productList.dart';
 import 'package:appvline/view/recordingTask.dart';
 import 'package:appvline/view/tracking_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
+//import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 
@@ -27,7 +27,7 @@ Future<void> _solicitarPermisos() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  //await Firebase.initializeApp();
   tz.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation('America/Lima')); // Ajusta a tu zona
 
