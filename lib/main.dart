@@ -45,22 +45,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'App Vlinesys',
+      title: 'App Vyrutech',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue.shade800),
+        //colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF081323)),
         useMaterial3: true,
       ),
       initialRoute:  lastRoute ?? '/',
       routes: {
         '/': (context) => LoginPage(),
-        "tracking": (context) =>  TrackingScreen(),
-        "mapa-cliente": (context) =>  MapaClienteScreen(),
-        "productList": (context) =>  ProductListScreen(products_cart: []),
-        "caja": (context) =>  CashboxScreen(),
-        "cotizacion": (context) =>  CotizacionListScreen(),
-        "cobros": (context) =>  CobrosListScreen(),
-        "recordatorio": (context) =>  RecordatoriosScreen()},
+        "/tracking": (context) =>  TrackingScreen(),
+        "/mapa-cliente": (context) =>  MapaClienteScreen(),
+        "/productList": (context) =>  ProductListScreen(products_cart: []),
+        "/caja": (context) =>  CashboxScreen(),
+        "/cotizacion": (context) =>  CotizacionListScreen(),
+        "/cobros": (context) =>  CobrosListScreen(),
+        "/recordatorio": (context) =>  RecordatoriosScreen()},
 
     );
   }

@@ -1,6 +1,6 @@
 import 'package:appvline/model/util/location_notification_services.dart';
 import 'package:flutter/material.dart';
-//import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -18,7 +18,7 @@ class _RecordatoriosScreenState extends State<RecordatoriosScreen> {
   final _tareaController = TextEditingController();
   DateTime? _fechaSeleccionada;
   TimeOfDay? _horaSeleccionada;
- // final _dbRef = FirebaseDatabase.instance.ref('recordatorios');
+  final _dbRef = FirebaseDatabase.instance.ref('recordatorios');
 
   @override
   void dispose() {
@@ -144,10 +144,10 @@ class _RecordatoriosScreenState extends State<RecordatoriosScreen> {
       _horaSeleccionada!.minute,
     );
 
-    /*_dbRef.push().set({
+    _dbRef.push().set({
       'tarea': _tareaController.text,
       'fechaHora': fechaHora.toIso8601String(),
-    });*/
+    });
     _programarNotificacion(_tareaController.text, fechaHora);
 
     _tareaController.clear();
@@ -206,7 +206,7 @@ class _RecordatoriosScreenState extends State<RecordatoriosScreen> {
             ),
           ),
           Divider(),
-          /*Expanded(
+          Expanded(
             child: StreamBuilder(
               stream: _dbRef.onValue,
               builder: (context, snapshot) {
@@ -240,7 +240,7 @@ class _RecordatoriosScreenState extends State<RecordatoriosScreen> {
                 );
               },
             ),
-          ),*/
+          ),
         ],
       ),
     );

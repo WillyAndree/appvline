@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 
 const kTextColor = Color(0xFF3C4046);
 const kBackgroundColor = Color(0xFFF9F8FD);
-const url_base = "https://casadelvidriero.com/app/controlador";
+String subdominio = "";
+String foto_const = "";
+var url_base = "https://$subdominio.vlinesys.com/app/controlador";
 const double kDefaultPadding = 20.0;
 
 const kSpacingUnit = 10;
@@ -17,7 +19,7 @@ const kPrimaryColor = Color(0xFF00AB74);
 const kDarkPrimaryColor = Color(0xFF00AB74);
 const kAccentColor = Color(0xFFFFC107);
 const MenuColor = Color(0XFF107512);
-const MenuPrincipal = Color(0XFF7FC880);
+const MenuPrincipal = Color(0xFF081323);
 const azulvline = Color(0XFF3B5977);
 
 String? nombreUsuario = "";

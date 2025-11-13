@@ -38,9 +38,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
       },
     );
     try {
-      final response = await http.post(Uri.parse("$url_base/producto.listar.all.php"), body: {
+      final response = await http.post(Uri.parse("$url_base/producto.listar.nombres.php"), body: {
         "nombres":producto,
-        "sucursal":sucursal
+        "codigo_sucursal":sucursal
       });
 
       if (response.statusCode == 200) {

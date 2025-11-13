@@ -17,11 +17,8 @@ class _CashboxScreenState extends State<CashboxScreen> {
   Future<void> fetchCaja(String fecha, String sucursal) async {
     try {
       String codigo_sucur = "";
-      if(sucursal == "14"){
-        codigo_sucur = "2";
-      }else{
+
         codigo_sucur = sucursal;
-      }
       final response = await http.post(Uri.parse("$url_base/caja.montos.listar.php"), body: {
         "fecha":fecha, "sucursal":codigo_sucur
       });
@@ -316,7 +313,7 @@ class _CashboxScreenState extends State<CashboxScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: azulvline,
           foregroundColor: Colors.white,
           actions: [
             IconButton(onPressed: (){

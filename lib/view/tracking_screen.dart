@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
 
 class TrackingScreen extends StatefulWidget {
@@ -8,13 +8,13 @@ class TrackingScreen extends StatefulWidget {
 }
 
 class _TrackingScreenState extends State<TrackingScreen> {
-  //late DatabaseReference _ubicacionRef;
+  late DatabaseReference _ubicacionRef;
   Stream<Position>? _positionStream;
 
   @override
   void initState() {
     super.initState();
-    //_ubicacionRef = FirebaseDatabase.instance.ref().child('ubicaciones/vehiculo123');
+    _ubicacionRef = FirebaseDatabase.instance.ref().child('ubicaciones/vehiculo123');
     _iniciarSeguimiento();
   }
 
@@ -36,13 +36,13 @@ class _TrackingScreenState extends State<TrackingScreen> {
       ),
     );
 
-    /*_positionStream!.listen((Position position) {
+    _positionStream!.listen((Position position) {
       _ubicacionRef.set({
         'lat': position.latitude,
         'lng': position.longitude,
         'timestamp': ServerValue.timestamp,
       });
-    });*/
+    });
     return true;
   }
 

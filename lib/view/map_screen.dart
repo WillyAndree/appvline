@@ -1,6 +1,6 @@
 import 'package:appvline/constants.dart';
 import 'package:flutter/material.dart';
-//import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapaClienteScreen extends StatefulWidget {
@@ -18,10 +18,10 @@ class _MapaClienteScreenState extends State<MapaClienteScreen> {
   @override
   void initState() {
     super.initState();
-    //_escucharUbicacion();
+    _escucharUbicacion();
   }
 
-  /*void _escucharUbicacion() {
+  void _escucharUbicacion() {
     final ref = FirebaseDatabase.instance.ref('ubicaciones/vehiculo123');
 
     ref.onValue.listen((event) {
@@ -50,7 +50,7 @@ class _MapaClienteScreenState extends State<MapaClienteScreen> {
     }, onError: (error) {
       debugPrint('Error al escuchar ubicación: $error');
     });
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {

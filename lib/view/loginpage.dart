@@ -1,8 +1,11 @@
 
 import 'dart:convert';
+import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:appvline/constants.dart';
 import 'package:appvline/view/principal_page.dart';
@@ -13,6 +16,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
   final _dniController = TextEditingController();
+  final subdominioController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   late AnimationController _animationController;
@@ -53,7 +57,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     }
   }
 
-  Future<List?> fetchAndStoreUsers(BuildContext context, String login, String clave) async {
+  Future<List?> fetchAndStoreUsers(BuildContext context, String login, String clave, String subdominio_local) async {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -74,12 +78,12 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     List users = [];
 
     try {
-      final response = await http.post(Uri.parse("$url_base/sesion.iniciar.app.controlador.php"),body:{
+      final response = await http.post(Uri.parse("https://$subdominio_local.vlinesys.com/app/controlador/sesion.iniciar.app.controlador.php"),body:{
         "txtusuario":login, "txtclave":clave
       });
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> rptaJson = json.decode(response.body);
+        final Map<String, dynamic> rptaJson = json.decode(response.body) ;
         var userssJson = rptaJson["datos"] ?? [];
 
         if ( userssJson.isEmpty) {
@@ -116,13 +120,16 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     }
   }
 
-  Future<void> loginSearch(String login, String password) async {
-    final datos = await fetchAndStoreUsers(context,login, password);
+  Future<void> loginSearch(String login, String password, String subdominio_local) async {
+    final datos = await fetchAndStoreUsers(context,login, password, subdominio_local);
 
     if (datos!.isNotEmpty) { // Validamos si se encontró el usuario
       setState(() {
         idusuario = datos[0]["codigo"].toString();
         idsucursal = datos[0]["codigo_sucursal"].toString();
+        nombreUsuario = datos[0]["nombre"].toString();
+        foto_const = datos[0]["foto"].toString();
+        subdominio = subdominio_local;
       });
 
       _login();
@@ -138,21 +145,16 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue.shade100,
+      backgroundColor: Color(0xFF081323),
       body: FadeTransition(
         opacity: _fadeAnimation,
         child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(
-                  "assets/images/back.jpg",
-                ),
-                fit: BoxFit.fill),
-          ),
+          color: Colors.white,
             child: Center(
           child: SingleChildScrollView(
             padding: EdgeInsets.all(24.0),
             child: Card(
+              color: Color(0xFF081323),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               elevation: 8,
               child: Padding(
@@ -162,40 +164,134 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                  Container(
+                        width: MediaQuery.sizeOf(context).width*0.5,
+                    height: MediaQuery.sizeOf(context).height*0.2,
+                          decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                            "assets/images/vyru.png",
+                          ),
+                            fit: BoxFit.fill),
+                      ),),
                       Text('Inicio de Sesión',
-                          style: TextStyle(fontSize: 24, color: azulvline, fontWeight: FontWeight.bold)),
+                          style: TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold)),
                       SizedBox(height: 20),
-                      TextFormField(
-                        controller: _dniController,
-                        keyboardType: TextInputType.text,
-                        //inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                        decoration: InputDecoration(labelText: 'Usuario', border: OutlineInputBorder()),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'El USUARIO es requerido.';
-                          }
-                          /*if (value.length != 8) {
-                            return 'El DNI debe tener exactamente 8 dígitos.';
-                          }*/
-                          return null;
-                        },
+                      Container(
+                        width: MediaQuery.sizeOf(context).width * 0.8,
+                        child: Row(children: [
+
+                          Container(
+                            alignment: Alignment.center,
+                            width: MediaQuery.sizeOf(context).width * 0.4,
+                            height: MediaQuery.sizeOf(context).height * 0.06,
+                            child: TextFormField(
+                              controller: subdominioController,
+                              keyboardType: TextInputType.text,
+                              //inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                              style: TextStyle(color: Colors.white),
+                              decoration:  InputDecoration(labelText: 'Dominio empresa', labelStyle: const TextStyle(color: Colors.white54), enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(18),
+                                borderSide: const BorderSide(color: Colors.white, width: 2.0), // Ajusta el ancho si es necesario
+                              ),
+                                // También es buena práctica definir el borde para el estado enfocado (cuando el usuario hace clic)
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(18),
+                                  borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                                ),
+                                // Si no usas enabledBorder/focusedBorder, usa 'border' como fallback
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(18),
+                                  borderSide: const BorderSide(color: Colors.white),
+                                ),),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'El DOMINIO es requerido.';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                           Container(
+                             alignment: Alignment.center,
+                            width: MediaQuery.sizeOf(context).width * 0.3,
+                            height: MediaQuery.sizeOf(context).height * 0.06,
+                            child: const Text('vyrutech.com',
+                                style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
+                          ),
+                        ],),
+                      ),
+
+                      SizedBox(height: 20),
+                      Container(
+                        width: MediaQuery.sizeOf(context).width * 0.8,
+                        height: MediaQuery.sizeOf(context).height * 0.06,
+                        child: TextFormField(
+                          controller: _dniController,
+                          keyboardType: TextInputType.text,
+                          style: TextStyle(color: Colors.white),
+                          //inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          decoration:  InputDecoration(labelText: 'Usuario', labelStyle: const TextStyle(color: Colors.white54), enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                            borderSide: const BorderSide(color: Colors.white, width: 2.0), // Ajusta el ancho si es necesario
+                          ),
+                            // También es buena práctica definir el borde para el estado enfocado (cuando el usuario hace clic)
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(18),
+                              borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                            ),
+                            // Si no usas enabledBorder/focusedBorder, usa 'border' como fallback
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(18),
+                              borderSide: const BorderSide(color: Colors.white),
+                            ),),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'El USUARIO es requerido.';
+                            }
+                            /*if (value.length != 8) {
+                              return 'El DNI debe tener exactamente 8 dígitos.';
+                            }*/
+                            return null;
+                          },
+                        ),
                       ),
                       SizedBox(height: 20),
-                      TextFormField(
-                        controller: _passwordController,
-                        obscureText: true,
-                        decoration: InputDecoration(labelText: 'Contraseña', border: OutlineInputBorder()),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'La contraseña es requerida.';
-                          }
-                          return null;
-                        },
+
+                      Container(
+                        width: MediaQuery.sizeOf(context).width * 0.8,
+                        height: MediaQuery.sizeOf(context).height * 0.06,
+                        child: TextFormField(
+                          controller: _passwordController,
+                          obscureText: true,
+                          style: TextStyle(color: Colors.white),
+                          decoration: InputDecoration(labelText: 'Contraseña', labelStyle: const TextStyle(color: Colors.white54), enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                            borderSide: const BorderSide(color: Colors.white, width: 2.0), // Ajusta el ancho si es necesario
+                          ),
+                            // También es buena práctica definir el borde para el estado enfocado (cuando el usuario hace clic)
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(18),
+                              borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                            ),
+                            // Si no usas enabledBorder/focusedBorder, usa 'border' como fallback
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(18),
+                              borderSide: const BorderSide(color: Colors.white),
+                            ),),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'La contraseña es requerida.';
+                            }
+                            return null;
+                          },
+                        ),
                       ),
                       SizedBox(height: 30),
                       ElevatedButton(
                         onPressed:() async{
-                          await loginSearch(_dniController.text, _passwordController.text);
+                          await loginSearch(_dniController.text, _passwordController.text, subdominioController.text);
                         },
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
